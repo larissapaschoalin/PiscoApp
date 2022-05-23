@@ -15,37 +15,22 @@ struct JoinView: View {
             
             Spacer()
             
-            if isFull == true {
-                Button {
-                    print("lalala")
-                } label: {
-                    ZStack {
-                        Image("Button")
-                        
-                        Text("Join")
-                            .font(Font.custom("PressStart2P-Regular", size: 30))
-                            .foregroundColor(Color(.black))
-                            .textCase(.uppercase)
-                            .padding(.trailing)
-                        
-                    }
-                }
-                
-            } else {
-                Button {
-                    print("lalala")
-                } label: {
-                    ZStack {
-                        Image("DisabledButton")
-                        
-                        Text("Join")
-                            .font(Font.custom("PressStart2P-Regular", size: 30))
-                            .foregroundColor(Color("BackgroundColor"))
-                            .textCase(.uppercase)
-                            .padding(.top, 6)
-                    }
+            
+            Button {
+                print("lalala")
+            } label: {
+                ZStack {
+                    Image(isFull ? "Button" : "DisabledButton")
+                    
+                    Text("Join")
+                        .font(Font.custom("PressStart2P-Regular", size: 30))
+                        .foregroundColor(isFull ? Color("DarkColor") : Color("BackgroundColor"))
+                        .textCase(.uppercase)
+                        .padding(.trailing)
+                    
                 }
             }
+            
             
             Spacer()
             

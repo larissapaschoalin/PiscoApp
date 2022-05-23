@@ -73,7 +73,7 @@ struct HomeView: View {
                 
                 VStack(spacing: 20) {
                     Button{
-                        print("Entrar")
+                        print("entrar na pagina de colocar codigo")
                     } label: {
                         ZStack {
                             Image("Button")
@@ -86,9 +86,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    Button{
-                        print("Entrar host")
-                    } label: {
+                    NavigationLink(destination: GameRoomView()) {
                         ZStack {
                             Image("Button")
                             

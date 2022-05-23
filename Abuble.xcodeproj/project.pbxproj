@@ -15,6 +15,8 @@
 		90403A412833B0A100DBF781 /* MatrixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90403A402833B0A100DBF781 /* MatrixView.swift */; };
 		90403A432833DBEA00DBF781 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90403A422833DBEA00DBF781 /* CellView.swift */; };
 		90403A452834005B00DBF781 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90403A442834005B00DBF781 /* Cell.swift */; };
+		909C18A228381F23007A9AE6 /* MiniGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909C18A128381F23007A9AE6 /* MiniGame.swift */; };
+		909C18A428381F7C007A9AE6 /* MiniGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909C18A328381F7C007A9AE6 /* MiniGameView.swift */; };
 		90B89EEA28372C1700A886D2 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B89EE928372C1700A886D2 /* GameKit.framework */; };
 		90B89EEC28372F6500A886D2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B89EEB28372F6500A886D2 /* User.swift */; };
 		90B89EEE28373AFA00A886D2 /* GameRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B89EED28373AFA00A886D2 /* GameRoomView.swift */; };
@@ -35,6 +37,8 @@
 		90403A402833B0A100DBF781 /* MatrixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixView.swift; sourceTree = "<group>"; };
 		90403A422833DBEA00DBF781 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		90403A442834005B00DBF781 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		909C18A128381F23007A9AE6 /* MiniGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGame.swift; sourceTree = "<group>"; };
+		909C18A328381F7C007A9AE6 /* MiniGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameView.swift; sourceTree = "<group>"; };
 		90B89EE4283729A100A886D2 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		90B89EE928372C1700A886D2 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		90B89EEB28372F6500A886D2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -81,6 +85,7 @@
 			children = (
 				90B89EE32837299B00A886D2 /* Fonts */,
 				90B89EE22837296D00A886D2 /* Models */,
+				909C18A728382178007A9AE6 /* Components */,
 				90B89EE12837296200A886D2 /* Views */,
 				90B904DE2835D361007D857F /* Info.plist */,
 				90403A322833B00F00DBF781 /* AbubleApp.swift */,
@@ -99,12 +104,20 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		909C18A728382178007A9AE6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				90403A422833DBEA00DBF781 /* CellView.swift */,
+				90403A402833B0A100DBF781 /* MatrixView.swift */,
+				909C18A328381F7C007A9AE6 /* MiniGameView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		90B89EE12837296200A886D2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				90403A342833B00F00DBF781 /* ContentView.swift */,
-				90403A422833DBEA00DBF781 /* CellView.swift */,
-				90403A402833B0A100DBF781 /* MatrixView.swift */,
 				90B904E12835DB91007D857F /* HomeView.swift */,
 				90309C122836D0FF00AED976 /* JoinView.swift */,
 				90B904D02835C5D5007D857F /* PaintView.swift */,
@@ -119,6 +132,7 @@
 				90B904D22835C91E007D857F /* Matrix.swift */,
 				90403A442834005B00DBF781 /* Cell.swift */,
 				90B89EEB28372F6500A886D2 /* User.swift */,
+				909C18A128381F23007A9AE6 /* MiniGame.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				909C18A228381F23007A9AE6 /* MiniGame.swift in Sources */,
 				90B904D32835C91E007D857F /* Matrix.swift in Sources */,
 				90309C132836D0FF00AED976 /* JoinView.swift in Sources */,
 				90403A352833B00F00DBF781 /* ContentView.swift in Sources */,
@@ -221,6 +236,7 @@
 				90B904E22835DB91007D857F /* HomeView.swift in Sources */,
 				90B89EEE28373AFA00A886D2 /* GameRoomView.swift in Sources */,
 				90403A412833B0A100DBF781 /* MatrixView.swift in Sources */,
+				909C18A428381F7C007A9AE6 /* MiniGameView.swift in Sources */,
 				90B89EEC28372F6500A886D2 /* User.swift in Sources */,
 				90B904D12835C5D5007D857F /* PaintView.swift in Sources */,
 			);
@@ -357,6 +373,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Abuble/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pisco;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -388,6 +405,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Abuble/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pisco;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
