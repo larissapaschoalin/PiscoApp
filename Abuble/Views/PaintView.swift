@@ -9,8 +9,8 @@ import SwiftUI
 
 struct PaintView: View {
     @State var selectedColor: Color = Color("YellowColor")
-    
-    let matrix: Matrix = Matrix(cells: Cell.populate())
+    @ObservedObject var coordinator: Coordinator
+    @State var matrix: Matrix
     
     @State var colors: [Color] = [
         Color("RedColor"),
@@ -30,6 +30,10 @@ struct PaintView: View {
         GridItem(.flexible())
     ]
     
+    init(coordinator: Coordinator) {
+        self.coordinator = coordinator
+        self.matrix = coordinator.matrix
+    }
     
     
     var body: some View {
@@ -95,7 +99,7 @@ struct PaintView: View {
                 }
                 
                 Button {
-                    print("salvar")
+                    coordinator.saveDrawing(matrix)
                 } label: {
                     ZStack {
                         Image("Button")
@@ -117,12 +121,5 @@ struct PaintView: View {
         }
         .padding(.horizontal)
         .background(Color("BackgroundColor").ignoresSafeArea())
-        
-    }
-}
-
-struct PaintView_Previews: PreviewProvider {
-    static var previews: some View {
-        PaintView()
     }
 }

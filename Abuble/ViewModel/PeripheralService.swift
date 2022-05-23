@@ -71,15 +71,22 @@ final class PeripheralService: NSObject, Identifiable {
     private var outputChar: CBCharacteristic?
     
     private var centralManager: CBCentralManager?
-    private var connectedPeripheral: CBPeripheral? {
-        didSet {
-            connectedPeripheral == nil ? listeners.map { $0.disconnected() } : listeners.map { $0.connected() }
-        }
-    }
+    private var connectedPeripheral: CBPeripheral?
+//    {
+//        didSet {
+//            for listener in listeners {
+//                if let _ = connectedPeripheral {
+//                    listener.connected()
+//                } else {
+//                    listener.disconnected()
+//                }
+//            }
+//        }
+//    }
     
     func connect() {
         centralQueue = DispatchQueue(label: "test.discovery")
-        centralManager = CBCentralManager(delegate: self, queue: centralQueue)
+        centralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
     func disconnect() {
@@ -148,6 +155,14 @@ extension PeripheralService: CBPeripheralDelegate {
                 peripheral.setNotifyValue(true, for: ch)
             default:
                 break
+            }
+        }
+        
+        for listener in listeners {
+            if let _ = connectedPeripheral {
+                listener.connected()
+            } else {
+                listener.disconnected()
             }
         }
     }

@@ -13,13 +13,15 @@ class Coordinator: ObservableObject {
     
     let user: User
     @Published var matrix: Matrix
-    @Published var isConnected: Bool = false {
-        didSet {
-            if isConnected {
-                PeripheralService.shared.setPisco(to: matrix)
-            }
-        }
-    }
+    @Published var isConnected: Bool = false
+//    {
+//        didSet {
+//            if isConnected {
+//                let matrix = Matrix(cells: matrix.cells)
+//                PeripheralService.shared.setPisco(to: matrix)
+//            }
+//        }
+//    }
     @Published var connectionError: Bool = false
     var lastMoveCoord: Int? = nil
     var lastMoveDoneByCoord: String? = nil
@@ -144,7 +146,7 @@ extension Coordinator: PeripheralViewModelListener {
     func connected() {
         connectionError = false
         isConnected = true
-        PeripheralService.shared.setPisco(to: matrix)
+        PeripheralService.shared.setPisco(to: self.matrix)
     }
     
     func disconnected() {

@@ -57,7 +57,7 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        NavigationLink("Editar", destination: PaintView())
+                        NavigationLink("Editar", destination: PaintView(coordinator: coordinator))
                             .font(Font.custom("Montserrat-Regular", size: 20))
                             .foregroundColor(Color("YellowColor"))
                         
