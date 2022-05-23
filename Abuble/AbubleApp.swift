@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GameKit
+import Firebase
 
 @main
 struct AbubleApp: App {
@@ -21,6 +22,10 @@ struct AbubleApp: App {
             }
             user.from(gameCenter: localPlayer)
         }
+    }
+    
+    init() {
+        FirebaseApp.configure()
     }
     
     var body: some Scene {

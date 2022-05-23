@@ -44,6 +44,7 @@
 		FA29DF4B283C060C00D55EC2 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FA29DF4A283C060C00D55EC2 /* FirebaseFirestore */; };
 		FA29DF4D283C060C00D55EC2 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = FA29DF4C283C060C00D55EC2 /* FirebaseFirestoreCombine-Community */; };
 		FA29DF4F283C060C00D55EC2 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FA29DF4E283C060C00D55EC2 /* FirebaseFirestoreSwift */; };
+		FA29DF51283C08B000D55EC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA29DF50283C08B000D55EC2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		FA29DF43283C053A00D55EC2 /* ConnectFourService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectFourService.swift; sourceTree = "<group>"; };
 		FA29DF45283C054F00D55EC2 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		FA29DF47283C055D00D55EC2 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		FA29DF50283C08B000D55EC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				FA29DF40283C050900D55EC2 /* ViewModel */,
 				909C18A728382178007A9AE6 /* Components */,
 				90B904DE2835D361007D857F /* Info.plist */,
+				FA29DF50283C08B000D55EC2 /* GoogleService-Info.plist */,
 				90403A322833B00F00DBF781 /* AbubleApp.swift */,
 				90403A362833B01100DBF781 /* Assets.xcassets */,
 				90403A382833B01100DBF781 /* Preview Content */,
@@ -333,6 +336,7 @@
 				90B904E02835D584007D857F /* PressStart2P-Regular.ttf in Resources */,
 				90403A3A2833B01100DBF781 /* Preview Assets.xcassets in Resources */,
 				90403A372833B01100DBF781 /* Assets.xcassets in Resources */,
+				FA29DF51283C08B000D55EC2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
