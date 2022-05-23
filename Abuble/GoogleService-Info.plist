@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>51749956261-v1l84i10ser5kn8q28q6mlduoc3qkr1o.apps.googleusercontent.com</string>
+	<string>51749956261-644smad29mttl74do6ppr6c85oqdf0kb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.51749956261-v1l84i10ser5kn8q28q6mlduoc3qkr1o</string>
+	<string>com.googleusercontent.apps.51749956261-644smad29mttl74do6ppr6c85oqdf0kb</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBDmKeh6vkYUF2Qtf_nv8CZEAf4L4A1VfU</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.paschoalin.Abuble</string>
+	<string>com.paschoalin.Abuble3</string>
 	<key>PROJECT_ID</key>
 	<string>pisco-8b167</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:51749956261:ios:547aeda48ebba66045fb4c</string>
+	<string>1:51749956261:ios:5119802abc69b54d45fb4c</string>
 </dict>
 </plist>

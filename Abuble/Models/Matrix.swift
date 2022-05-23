@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Matrix {
+class Matrix: Codable {
     var cells: [Cell] = []
     
     init() {}

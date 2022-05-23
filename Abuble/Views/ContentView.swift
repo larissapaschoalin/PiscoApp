@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var user: User
+    
     var body: some View {
         NavigationView {
-           HomeView()
+            HomeView(coordinator: Coordinator(user: user))
         }
     }
         

@@ -9,18 +9,14 @@ import SwiftUI
 import GameKit
 
 struct HomeView: View {
-    @EnvironmentObject var user: User
-    let matrix: Matrix = Matrix(cells: Cell.populate())
-    
-    var isConnected: Bool = true
+    @ObservedObject var coordinator: Coordinator
     
     var body: some View {
         
         VStack(spacing: 30) {
-            
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Hey,\(user.name)")
+                    Text("Hey,\(coordinator.user.name)")
                         .font(Font.custom("PressStart2P-Regular", size: 26))
                         .foregroundColor(Color("DarkColor"))
                     
@@ -32,7 +28,7 @@ struct HomeView: View {
                 Spacer()
                 
                 
-                if let photo = user.photo {
+                if let photo = coordinator.user.photo {
                     photo
                         .resizable()
                         .scaledToFill()
@@ -51,7 +47,7 @@ struct HomeView: View {
             }
             
             
-            if isConnected == true {
+            if coordinator.isConnected {
                 VStack(alignment: .leading, spacing: 6) {
                     
                     HStack {
@@ -67,95 +63,61 @@ struct HomeView: View {
                         
                     }
                     
-                    MatrixView(matrix: matrix)
-                }
-                
-                
-                VStack(spacing: 20) {
-                    Button{
-                        print("entrar na pagina de colocar codigo")
-                    } label: {
-                        ZStack {
-                            Image("Button")
-                            
-                            Text("Play")
-                                .font(Font.custom("PressStart2P-Regular", size: 30))
-                                .foregroundColor(Color(.black))
-                                .textCase(.uppercase)
-                                .padding(.trailing)
-                        }
-                    }
-                    
-                    NavigationLink(destination: GameRoomView()) {
-                        ZStack {
-                            Image("Button")
-                            
-                            Text("Host")
-                                .font(Font.custom("PressStart2P-Regular", size: 30))
-                                .foregroundColor(Color(.black))
-                                .textCase(.uppercase)
-                                .padding(.trailing)
-                        }
-                    }
-                    
+                    MatrixView(matrix: coordinator.matrix)
                 }
                 
             } else {
                 
-                ZStack {
-                    
-                    Image("DashStroke")
-                    
-                    VStack {
-                        Image("Connection")
+                VStack(spacing: 2) {
+                    ZStack {
                         
-                        Text("Conecte seu Pisco para jogar")
-                            .font(Font.custom("Montserrat-Regular", size: 26))
-                            .foregroundColor(.black)
-                            .multilineTextAlignment(.center)
-                    }
-                }
-                
-                
-                VStack(spacing: 20) {
-                    Button {
-                        print("Não pode entrar")
-                    } label: {
-                        ZStack {
-                            Image("DisabledButton")
+                        Image("DashStroke")
+                        
+                        VStack {
+                            Image("Connection")
                             
-                            Text("Play")
-                                .font(Font.custom("PressStart2P-Regular", size: 30))
-                                .foregroundColor(Color("BackgroundColor"))
-                                .textCase(.uppercase)
-                                .padding(.top, 6)
+                            Text("Conecte seu Pisco para jogar")
+                                .font(Font.custom("Montserrat-Regular", size: 26))
+                                .foregroundColor(.black)
+                                .multilineTextAlignment(.center)
                         }
+                    }.onTapGesture {
+                        coordinator.tryToConnect()
                     }
-                    
-                    Button {
-                        print("Não pode entrar")
-                    } label: {
-                        ZStack {
-                            Image("DisabledButton")
-                            
-                            Text("Host")
-                                .font(Font.custom("PressStart2P-Regular", size: 30))
-                                .foregroundColor(Color("BackgroundColor"))
-                                .textCase(.uppercase)
-                                .padding(.top, 6)
-                        }
+                    if (coordinator.connectionError) {
+                        Text("Falha ao conectar, tente novamente!")
+                            .font(.caption)
+                            .foregroundColor(.red)
                     }
                 }
             }
+                
+            VStack(spacing: 20) {
+                SquareButton(isEnabled: $coordinator.isConnected) {
+                    print("a")
+                } content: {
+                    Text("Play")
+                        .font(Font.custom("PressStart2P-Regular", size: 30))
+                        .foregroundColor(Color("BackgroundColor"))
+                        .textCase(.uppercase)
+                        .padding(.top, 6)
+                }
+                
+                SquareButton(isEnabled: $coordinator.isConnected) {
+                    coordinator.hostGame()
+                } content: {
+                    Text("Host")
+                        .font(Font.custom("PressStart2P-Regular", size: 30))
+                        .foregroundColor(Color("BackgroundColor"))
+                        .textCase(.uppercase)
+                        .padding(.top, 6)
+                }
+            }
             
+            Spacer()
         }
         .padding(.horizontal, 20)
         .background(Color("BackgroundColor").ignoresSafeArea())
-    }
-}
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
+        .fullScreenCover(isPresented: $coordinator.isInsideRoom, onDismiss: {}, content: { GameRoomView() })
     }
 }

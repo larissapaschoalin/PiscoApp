@@ -26,11 +26,3 @@ struct CellView: View {
         }
     }
 }
-
-
-
-struct CellView_Previews: PreviewProvider {
-    static var previews: some View {
-        CellView(cell: Cell(initColor: .black))
-    }
-}
