@@ -13,11 +13,10 @@ class Coordinator: ObservableObject {
     
     let user: User
     @Published var matrix: Matrix
-    // MARK: Voltar para false
-    @Published var isConnected: Bool = true
+    @Published var isConnected: Bool = false
     @Published var connectionError: Bool = false
-    var lastMoveCoord: Int? = nil
-    var lastMoveDoneByCoord: String? = nil
+//    var lastMoveCoord: Int? = nil
+//    var lastMoveDoneByCoord: String? = nil
     
     @Published private var room: GameRoom? {
         // MARK: Percebeu mudança de estado
@@ -28,20 +27,6 @@ class Coordinator: ObservableObject {
             }
             
             isInsideRoom = user.id == room.hostId || user.id == room.opponentId
-
-            if let lastMove = room.lastMove,
-               let lastPlayer = room.lastMoveDoneBy {
-                if lastMove != lastMoveCoord && lastPlayer != lastMoveDoneByCoord {
-                    PeripheralService.shared.dropPiece(at: lastMove, color: lastPlayer == room.hostId ? UIColor.blue : UIColor.red )
-                    game?.check(action: ConnectFourAction(column: lastMove))
-                    lastMoveCoord = lastMove
-                    lastMoveDoneByCoord = lastPlayer
-                    
-                    if let winner = game?.currentGameState.winner  {
-                        self.winner = winner == 1 ? room.hostId : room.opponentId
-                    }
-                }
-            }
         }
     }
     @Published var isInsideRoom: Bool = false
@@ -106,7 +91,13 @@ class Coordinator: ObservableObject {
         }
         game?.delegate = self
         game?.startGame()
-        self.room!.blockedPlayersIds = [self.room!.opponentId ?? "nenhum"]
+        PeripheralService.shared.resetPisco()
+//        lastMoveCoord = nil
+//        lastMoveDoneByCoord = nil
+        room?.lastMove = nil
+        room?.lastMoveDoneBy = nil
+        room?.playerTurn = room!.hostId
+        FirebaseService.shared.updateGame(room!)
     }
     
 }
@@ -119,32 +110,53 @@ extension Coordinator: PeripheralViewModelListener {
         if game!.isOver && user.id == room!.hostId {
             game!.resetGame()
             PeripheralService.shared.resetPisco()
-            lastMoveCoord = nil
-            lastMoveDoneByCoord = nil
+//            lastMoveCoord = nil
+//            lastMoveDoneByCoord = nil
             room?.lastMove = nil
             room?.lastMoveDoneBy = nil
-            room?.blockedPlayersIds = [room!.opponentId ?? "AI"]
+            room?.playerTurn = room?.hostId
             FirebaseService.shared.updateGame(room!)
             return
         }
         
-        if !self.room!.blockedPlayersIds.contains(user.id) && game!.isPossible(action: ConnectFourAction(column: row)) {
+        if room!.playerTurn == user.id && game!.isPossible(action: ConnectFourAction(column: row)) {
             // MARK: Realiza ação
             room?.lastMove = row
             room?.lastMoveDoneBy = user.id
-            room?.blockedPlayersIds = [user.id]
+            room?.playerTurn = room?.opponentId
             FirebaseService.shared.updateGame(room!)
+            perform()
         }
     }
     
     func connected() {
         connectionError = false
         isConnected = true
+        PeripheralService.shared.setPisco(to: matrix)
     }
     
     func disconnected() {
         connectionError = true
         isConnected = false
+    }
+    
+    func perform() {
+        guard room != nil else { return }
+        guard game != nil else { return }
+        
+        if let lastMove = room!.lastMove,
+           let lastPlayer = room!.lastMoveDoneBy {
+//             if lastMove != lastMoveCoord && lastPlayer != lastMoveDoneByCoord {
+                PeripheralService.shared.dropPiece(at: lastMove, color: lastPlayer == room!.hostId ? UIColor.blue : UIColor.red )
+                game?.check(action: ConnectFourAction(column: lastMove))
+//                lastMoveCoord = lastMove
+//                lastMoveDoneByCoord = lastPlayer
+                
+                if let winner = game?.currentGameState.winner  {
+                    self.winner = winner == 1 ? room!.hostId : room!.opponentId
+//                }
+            }
+        }
     }
 }
 
@@ -156,8 +168,9 @@ extension Coordinator: ConnectFourDelegate {
         // MARK: Realiza ação
         self.room!.lastMove = action.column
         self.room!.lastMoveDoneBy = player == 1 ? room!.hostId : room!.opponentId ?? "AI"
-        self.room!.blockedPlayersIds = player == 1 ? [room!.hostId] : [room!.opponentId ?? "AI"]
+        self.room!.playerTurn = player == 1 ? room!.opponentId ?? "AI" : room!.hostId
         FirebaseService.shared.updateGame(room!)
+        perform()
 //        self.room!.gameState = game!.currentGameState.grid
     }
 }

@@ -63,9 +63,6 @@ class ConnectFourService: ObservableObject {
         
         let possible_actions = game.getPossibleActions(at: currentGameState)
         if possible_actions.contains(action) {
-            if let delegate = delegate {
-                delegate.handle(action: action, for: player)
-            }
             player = currentGameState.move_count % 2 == 0 ? 2 : 1
             currentGameState = game.perform(action: action, at: currentGameState)
         }

@@ -179,10 +179,8 @@ extension PeripheralService: CBPeripheralDelegate {
             print(bytes)
             
             if let answer = bytes.first {
-                DispatchQueue.main.async {
-                    for listener in self.listeners {
-                        listener.handleClick(at: Int(answer))
-                    }
+                for listener in self.listeners {
+                    listener.handleClick(at: Int(answer))
                 }
             }
         }

@@ -17,8 +17,8 @@ struct GameRoom: Codable {
     var opponentId: String? = nil
     
     var selectedGame: Games = .connectFour
-    
-    var blockedPlayersIds: [String] = []
+
+    var playerTurn: String? = nil
     var winnerPlayerId: String? = nil
     
     var gameState: [Int] = []
