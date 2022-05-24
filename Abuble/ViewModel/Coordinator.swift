@@ -13,15 +13,8 @@ class Coordinator: ObservableObject {
     
     let user: User
     @Published var matrix: Matrix
-    @Published var isConnected: Bool = false
-//    {
-//        didSet {
-//            if isConnected {
-//                let matrix = Matrix(cells: matrix.cells)
-//                PeripheralService.shared.setPisco(to: matrix)
-//            }
-//        }
-//    }
+    // MARK: Voltar para false
+    @Published var isConnected: Bool = true
     @Published var connectionError: Bool = false
     var lastMoveCoord: Int? = nil
     var lastMoveDoneByCoord: String? = nil
@@ -29,8 +22,13 @@ class Coordinator: ObservableObject {
     @Published private var room: GameRoom? {
         // MARK: Percebeu mudança de estado
         didSet {
-            guard let room = room else { return }
+            guard let room = room else {
+                isInsideRoom = false
+                return
+            }
             
+            isInsideRoom = user.id == room.hostId || user.id == room.opponentId
+
             if let lastMove = room.lastMove,
                let lastPlayer = room.lastMoveDoneBy {
                 if lastMove != lastMoveCoord && lastPlayer != lastMoveDoneByCoord {
@@ -44,7 +42,11 @@ class Coordinator: ObservableObject {
     @Published var isInsideRoom: Bool = false
     
     private var cancellables: Set<AnyCancellable> = []
+    
+    // MARK: Variaveis para a sala
     var code: String { room?.code ?? "Fail" }
+    var isFriendOn: Bool { room?.opponentId != nil }
+    
     var game: ConnectFourService? = nil
     
     init(user: User) {
@@ -70,31 +72,22 @@ class Coordinator: ObservableObject {
     }
     
     func hostGame() {
-        FirebaseService.shared.createNewGame(with: user.name)
+        FirebaseService.shared.createNewGame(with: user.id)
         FirebaseService.shared.$room
             .assign(to: \.room, on: self)
             .store(in: &cancellables)
-        
-        if let _ = room {
-            isInsideRoom = true
-        }
     }
     
     func joinGame(withCode code: String) {
-        FirebaseService.shared.joinGame(with: code, userId: user.name)
+        FirebaseService.shared.joinGame(with: code, userId: user.id)
         FirebaseService.shared.$room
             .assign(to: \.room, on: self)
             .store(in: &cancellables)
-        
-        if let _ = room {
-            isInsideRoom = true
-        }
     }
     
-    func leaveRoom(userId: String) {
+    func leaveRoom() {
         guard let _ = room else { return }
-        isInsideRoom = false
-        FirebaseService.shared.quitGame(with: userId)
+        FirebaseService.shared.quitGame(with: user.id)
     }
     
     func isHost(_ userId: String) -> Bool {
@@ -121,7 +114,7 @@ extension Coordinator: PeripheralViewModelListener {
         guard room != nil else { return }
         guard game != nil else { return }
         
-        if game!.isOver && user.name == room!.hostId {
+        if game!.isOver && user.id == room!.hostId {
             game!.resetGame()
             PeripheralService.shared.resetPisco()
             lastMoveCoord = nil
@@ -133,12 +126,12 @@ extension Coordinator: PeripheralViewModelListener {
             return
         }
         
-        if !self.room!.blockedPlayersIds.contains(user.name) {
+        if !self.room!.blockedPlayersIds.contains(user.id) {
             // MARK: Realiza ação
             game?.check(action: ConnectFourAction(column: row))
             room?.lastMove = row
-            room?.lastMoveDoneBy = user.name
-            room?.blockedPlayersIds = [user.name]
+            room?.lastMoveDoneBy = user.id
+            room?.blockedPlayersIds = [user.id]
             FirebaseService.shared.updateGame(room!)
         }
     }
@@ -146,7 +139,6 @@ extension Coordinator: PeripheralViewModelListener {
     func connected() {
         connectionError = false
         isConnected = true
-        PeripheralService.shared.setPisco(to: self.matrix)
     }
     
     func disconnected() {

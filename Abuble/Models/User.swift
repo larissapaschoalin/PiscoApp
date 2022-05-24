@@ -9,6 +9,7 @@ import SwiftUI
 import GameKit
 
 class User: ObservableObject {
+    var id = UUID().uuidString
     @Published var name: String = ""
     @Published var photo: Image?
     

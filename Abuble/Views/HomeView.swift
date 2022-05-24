@@ -10,6 +10,7 @@ import GameKit
 
 struct HomeView: View {
     @ObservedObject var coordinator: Coordinator
+    @State var isJoining: Bool = false
     
     var body: some View {
         
@@ -94,11 +95,11 @@ struct HomeView: View {
                 
             VStack(spacing: 20) {
                 SquareButton(isEnabled: $coordinator.isConnected) {
-                    print("a")
+                    isJoining = true
                 } content: {
                     Text("Play")
                         .font(Font.custom("PressStart2P-Regular", size: 30))
-                        .foregroundColor(Color("BackgroundColor"))
+                        .foregroundColor(coordinator.isConnected ? Color("DarkColor") : Color("BackgroundColor"))
                         .textCase(.uppercase)
                         .padding(.top, 6)
                 }
@@ -108,7 +109,7 @@ struct HomeView: View {
                 } content: {
                     Text("Host")
                         .font(Font.custom("PressStart2P-Regular", size: 30))
-                        .foregroundColor(Color("BackgroundColor"))
+                        .foregroundColor(coordinator.isConnected ? Color("DarkColor") : Color("BackgroundColor"))
                         .textCase(.uppercase)
                         .padding(.top, 6)
                 }
@@ -118,6 +119,7 @@ struct HomeView: View {
         }
         .padding(.horizontal, 20)
         .background(Color("BackgroundColor").ignoresSafeArea())
-        .fullScreenCover(isPresented: $coordinator.isInsideRoom, onDismiss: {}, content: { GameRoomView() })
+        .fullScreenCover(isPresented: $coordinator.isInsideRoom, onDismiss: {}, content: { GameRoomView(coordinator: coordinator) })
+        .fullScreenCover(isPresented: $isJoining, onDismiss: {}, content: { JoinView(coordinator: coordinator, isJoining: $isJoining) })
     }
 }

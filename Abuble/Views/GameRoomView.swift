@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameRoomView: View {
-    @EnvironmentObject var user: User
+    @ObservedObject var coordinator: Coordinator
     
     @State var micOpen: Bool = true
     @State var audioOpen: Bool = true
@@ -32,10 +32,8 @@ struct GameRoomView: View {
         MiniGame(name: "BatNaval", show: false)
     ]
     
-    
     func getMid()->Int {
         return miniGames.count / 2
-        
     }
     
     func startGame() {
@@ -53,6 +51,10 @@ struct GameRoomView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 30) {
             
+            HStack {
+                Spacer()
+                Button { coordinator.leaveRoom() } label: { Image("X").padding(30) }
+            }
             Spacer()
             
             VStack {
@@ -61,7 +63,7 @@ struct GameRoomView: View {
                     .foregroundColor(Color("DarkColor"))
                 
                 
-                Text("xxx-xxx")
+                Text(coordinator.code.prefix(3) + "-" + coordinator.code.suffix(3))
                     .font(Font.custom("PressStart2P-Regular", size: 20))
                     .foregroundColor(Color("DarkColor"))
                     .padding()
@@ -103,7 +105,7 @@ struct GameRoomView: View {
                 
                 HStack (spacing: 20) {
                     
-                    if let photo = user.photo {
+                    if let photo = coordinator.user.photo {
                         photo
                             .resizable()
                             .scaledToFill()
@@ -121,9 +123,10 @@ struct GameRoomView: View {
                     }
                 
                     
-                    if friendOn == true {
+                    if coordinator.isFriendOn {
                         
-                        if let photo = user.photo {
+                        // MARK: Ajuste segunda foto
+                        if let photo = coordinator.user.photo {
                             photo
                                 .resizable()
                                 .scaledToFill()
@@ -141,12 +144,11 @@ struct GameRoomView: View {
                     }
                 }
             }
+            
             MiniGameView(miniGame: selectedGame)
 
             
             HStack(spacing: 30) {
-                
-                
                 Button {
                     micOpen.toggle()
                     
@@ -161,7 +163,7 @@ struct GameRoomView: View {
                 }
             }
             
-            if gameOn == false {
+            if gameOn {
                 Button {
                     startGame()
                 } label: {
@@ -193,10 +195,3 @@ struct GameRoomView: View {
     }
 }
 
-
-
-struct GameRoomView_Previews: PreviewProvider {
-    static var previews: some View {
-        GameRoomView()
-    }
-}
