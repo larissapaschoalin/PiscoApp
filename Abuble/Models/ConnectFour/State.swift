@@ -40,7 +40,7 @@ struct ConnectFourState: GameState, Hashable {
     
     var winner: Int? {
         if !self.is_over { return nil }
-        return move_count % 2 == 0 ? -1 : 1
+        return move_count % 2 == 0 ? 2 : 1
     }
     
     init(width: Int, height: Int) {

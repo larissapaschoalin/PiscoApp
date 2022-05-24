@@ -56,7 +56,7 @@ struct JoinView: View {
             .foregroundColor(Color("DarkColor"))
             .padding(.init(top: 35, leading: 45, bottom: 35, trailing: 45))
             .frame(width: 260)
-            .background(Rectangle().stroke(lineWidth: 5).foregroundColor(Color("DarkColor")))
+            .background(Rectangle().stroke(lineWidth: 4).foregroundColor(Color("DarkColor")))
             .onReceive(Just(code)) { _ in limitText(6) }
     
             Spacer(minLength: 110)

@@ -33,19 +33,26 @@ class Coordinator: ObservableObject {
                let lastPlayer = room.lastMoveDoneBy {
                 if lastMove != lastMoveCoord && lastPlayer != lastMoveDoneByCoord {
                     PeripheralService.shared.dropPiece(at: lastMove, color: lastPlayer == room.hostId ? UIColor.blue : UIColor.red )
+                    game?.check(action: ConnectFourAction(column: lastMove))
                     lastMoveCoord = lastMove
                     lastMoveDoneByCoord = lastPlayer
+                    
+                    if let winner = game?.currentGameState.winner  {
+                        self.winner = winner == 1 ? room.hostId : room.opponentId
+                    }
                 }
             }
         }
     }
     @Published var isInsideRoom: Bool = false
+    @Published var winner: String? = nil
     
     private var cancellables: Set<AnyCancellable> = []
     
     // MARK: Variaveis para a sala
     var code: String { room?.code ?? "Fail" }
     var isFriendOn: Bool { room?.opponentId != nil }
+    var isHost: Bool { room?.hostId == user.id }
     
     var game: ConnectFourService? = nil
     
@@ -90,11 +97,6 @@ class Coordinator: ObservableObject {
         FirebaseService.shared.quitGame(with: user.id)
     }
     
-    func isHost(_ userId: String) -> Bool {
-        guard let room = room else { return false }
-        return room.hostId == userId
-    }
-    
     func startGame() {
         let connectFour = ConnectFour(board_width: 8, board_height: 8)
         if let _ = room?.opponentId {
@@ -121,14 +123,13 @@ extension Coordinator: PeripheralViewModelListener {
             lastMoveDoneByCoord = nil
             room?.lastMove = nil
             room?.lastMoveDoneBy = nil
-            room?.blockedPlayersIds = [room?.opponentId ?? "AI"]
+            room?.blockedPlayersIds = [room!.opponentId ?? "AI"]
             FirebaseService.shared.updateGame(room!)
             return
         }
         
-        if !self.room!.blockedPlayersIds.contains(user.id) {
+        if !self.room!.blockedPlayersIds.contains(user.id) && game!.isPossible(action: ConnectFourAction(column: row)) {
             // MARK: Realiza ação
-            game?.check(action: ConnectFourAction(column: row))
             room?.lastMove = row
             room?.lastMoveDoneBy = user.id
             room?.blockedPlayersIds = [user.id]
@@ -154,8 +155,8 @@ extension Coordinator: ConnectFourDelegate {
         
         // MARK: Realiza ação
         self.room!.lastMove = action.column
-        self.room!.lastMoveDoneBy = player == 1 ? room!.hostId : room!.opponentId == nil ? "AI" : room!.opponentId
-        self.room!.blockedPlayersIds = player == 1 ? [room!.hostId] : room!.opponentId == nil ? ["nenhum"] : [room!.opponentId!]
+        self.room!.lastMoveDoneBy = player == 1 ? room!.hostId : room!.opponentId ?? "AI"
+        self.room!.blockedPlayersIds = player == 1 ? [room!.hostId] : [room!.opponentId ?? "AI"]
         FirebaseService.shared.updateGame(room!)
 //        self.room!.gameState = game!.currentGameState.grid
     }

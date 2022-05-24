@@ -49,13 +49,12 @@ struct GameRoomView: View {
     //    }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 30) {
+        VStack(alignment: .center) {
             
             HStack {
                 Spacer()
-                Button { coordinator.leaveRoom() } label: { Image("X").padding(30) }
+                Button { coordinator.leaveRoom() } label: { Image("X").padding(.horizontal, 15).padding(.top, 15) }
             }
-            Spacer()
             
             VStack {
                 Text("código da sala")
@@ -66,18 +65,19 @@ struct GameRoomView: View {
                 Text(coordinator.code.prefix(3) + "-" + coordinator.code.suffix(3))
                     .font(Font.custom("PressStart2P-Regular", size: 20))
                     .foregroundColor(Color("DarkColor"))
-                    .padding()
+                    .padding(.init(top: 35, leading: 45, bottom: 35, trailing: 45))
+                    .frame(width: 260)
                     .background(
                         Rectangle()
-                            .stroke(lineWidth: 2)
+                            .stroke(lineWidth: 4)
                             .foregroundColor(Color("DarkColor"))
                     )
                 
             }
             
-            if final == true {
+            if let winner = coordinator.winner {
                 
-                Image(win ? "HappyFace" : "SadFace")
+                Image(winner == coordinator.user.id ? "HappyFace" : "SadFace")
                 
                 VStack(spacing: 6) {
                     Text(win ? "Você" : "Game")
@@ -142,53 +142,81 @@ struct GameRoomView: View {
                                 .frame(width: 150, height: 150)
                         }
                     }
-                }
-            }
-            
-            MiniGameView(miniGame: selectedGame)
-
-            
-            HStack(spacing: 30) {
-                Button {
-                    micOpen.toggle()
-                    
-                } label: {
-                    Image(micOpen ? "MicOpen" : "MicClosed")
-                }
+                }.padding(.vertical, 40)
                 
-                Button {
-                    audioOpen.toggle()
-                } label: {
-                    Image(audioOpen ? "AudioOpen" : "AudioClosed")
-                }
-            }
-            
-            if gameOn {
-                Button {
-                    startGame()
-                } label: {
-                    ZStack {
-                        Image("Button")
+                VStack (spacing: 40) {
+                    MiniGameView(miniGame: selectedGame)
+                    
+                    HStack(spacing: 30) {
+                        Button {
+                            micOpen.toggle()
+                            
+                        } label: {
+                            Image(micOpen ? "MicOpen" : "MicClosed")
+                        }
                         
-                        Text("Play")
-                            .font(Font.custom("PressStart2P-Regular", size: 30))
-                            .foregroundColor(Color("DarkColor"))
-                            .textCase(.uppercase)
-                            .padding(.trailing, 6)
+                        Button {
+                            audioOpen.toggle()
+                        } label: {
+                            Image(audioOpen ? "AudioOpen" : "AudioClosed")
+                        }
+                    }
+                    
+                    if coordinator.isHost {
+                        Button {
+                            coordinator.startGame()
+                        } label: {
+                            ZStack {
+                                Image("Button")
+
+                                Text("Play")
+                                    .font(Font.custom("PressStart2P-Regular", size: 30))
+                                    .foregroundColor(Color("DarkColor"))
+                                    .textCase(.uppercase)
+                                    .padding(.trailing, 6)
+                            }
+                        }
                     }
                 }
-            } else {
-                Button {
-                    endGame()
-                } label: {
-                    Text(final ? "play again" : "acabou")
-                }
             }
             
-            Spacer()
+//            Spacer(minLength: 55)
+//
+//            HStack(spacing: 30) {
+//                Button {
+//                    micOpen.toggle()
+//
+//                } label: {
+//                    Image(micOpen ? "MicOpen" : "MicClosed")
+//                }
+//
+//                Button {
+//                    audioOpen.toggle()
+//                } label: {
+//                    Image(audioOpen ? "AudioOpen" : "AudioClosed")
+//                }
+//            }
+//
+//            if coordinator.isHost {
+//                Button {
+//                    coordinator.startGame()
+//                } label: {
+//                    ZStack {
+//                        Image("Button")
+//
+//                        Text("Play")
+//                            .font(Font.custom("PressStart2P-Regular", size: 30))
+//                            .foregroundColor(Color("DarkColor"))
+//                            .textCase(.uppercase)
+//                            .padding(.trailing, 6)
+//                    }
+//                }
+//            }
+//
+//            Spacer()
             
         }
-        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 20)
         .background(Color("BackgroundColor").ignoresSafeArea())
         

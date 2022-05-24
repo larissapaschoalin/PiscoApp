@@ -71,6 +71,11 @@ class ConnectFourService: ObservableObject {
         }
     }
     
+    func isPossible(action: ConnectFourAction) -> Bool {
+        let possible_actions = game.getPossibleActions(at: currentGameState)
+        return possible_actions.contains(action)
+    }
+    
     func resetGame() {
         game = ConnectFour(board_width: 8, board_height: 8)
         player = 1
