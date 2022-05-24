@@ -21,3 +21,7 @@ func getStripeColorArray(for matrix: Matrix) -> [UInt8] {
     print(stripeArray)
     return stripeArray
 }
+
+func getStripeIndex(row: Int, col: Int) -> Int {
+    return row % 2 == 0 ? row * 8 + col : row * 8 + (7 - col)
+}

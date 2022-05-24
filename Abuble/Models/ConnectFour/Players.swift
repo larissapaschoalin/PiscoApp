@@ -14,7 +14,8 @@ struct AlphaBetaConnectFourPlayer: ConnectFourPlayer {
     init(game: ConnectFour) {
         self.solver = AlphaBetaPlayer<ConnectFour>(game: game) { state in
             if let winner = state.winner {
-                return -Double(winner) * 900000.0
+                if winner == 2 { return 900000.0 }
+                return -900000.0
             }
             
             var sum = 0.0

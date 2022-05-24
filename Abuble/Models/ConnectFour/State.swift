@@ -50,6 +50,35 @@ struct ConnectFourState: GameState, Hashable {
         }
     }
     
+    func getWinningPositions() -> [[Int]] {
+        for i in 0..<grid.count {
+            for j in 0..<grid_width {
+                let origin = [i,j]
+                let mask = [
+                    [[origin[0] - 3, origin[1] - 3], [origin[0] - 2, origin[1] - 2], [origin[0] - 1, origin[1] - 1], origin],
+                    [[origin[0] - 3, origin[1] - 0], [origin[0] - 2, origin[1] - 0], [origin[0] - 1, origin[1] - 0], origin],
+                    [[origin[0] - 3, origin[1] + 3], [origin[0] - 2, origin[1] + 2], [origin[0] - 1, origin[1] + 1], origin],
+                    [[origin[0] - 0, origin[1] + 3], [origin[0] - 0, origin[1] + 2], [origin[0] - 0, origin[1] + 1], origin],
+                    [[origin[0] + 3, origin[1] + 3], [origin[0] + 2, origin[1] + 2], [origin[0] + 1, origin[1] + 1], origin],
+                    [[origin[0] + 3, origin[1] - 0], [origin[0] + 2, origin[1] - 0], [origin[0] + 1, origin[1] - 0], origin],
+                    [[origin[0] - 3, origin[1] + 3], [origin[0] - 2, origin[1] + 2], [origin[0] - 1, origin[1] + 1], origin],
+                    [[origin[0] - 0, origin[1] - 3], [origin[0] - 0, origin[1] - 2], [origin[0] - 0, origin[1] - 1], origin]]
+                let filtered_mask = mask.filter {
+                                        $0.allSatisfy {
+                                            $0[0] >= 0 && $0[0] < grid.count && $0[1] >= 0 && $0[1] < grid_width
+                                        }
+                                    }
+                for possibility in filtered_mask {
+                    let positions = possibility.map { grid[$0[0]][$0[1]] }
+                    if positions[0] != 0 && Set(positions).count == 1 {
+                        return possibility
+                    }
+                }
+            }
+        }
+        return []
+    }
+    
     func getNotFilledRowsIndexes() -> [Int] {
         return Array(0 ..< grid_width).filter { grid[0][$0] == 0 }
     }

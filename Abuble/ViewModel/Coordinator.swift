@@ -82,6 +82,10 @@ class Coordinator: ObservableObject {
         FirebaseService.shared.quitGame(with: user.id)
     }
     
+    func hasWinner() -> Bool {
+        return winner != nil
+    }
+    
     func startGame() {
         let connectFour = ConnectFour(board_width: 8, board_height: 8)
         if let _ = room?.opponentId {
@@ -97,6 +101,7 @@ class Coordinator: ObservableObject {
         room?.lastMove = nil
         room?.lastMoveDoneBy = nil
         room?.playerTurn = room!.hostId
+        winner = nil
         FirebaseService.shared.updateGame(room!)
     }
     
@@ -115,6 +120,7 @@ extension Coordinator: PeripheralViewModelListener {
             room?.lastMove = nil
             room?.lastMoveDoneBy = nil
             room?.playerTurn = room?.hostId
+            winner = nil
             FirebaseService.shared.updateGame(room!)
             return
         }
@@ -147,13 +153,16 @@ extension Coordinator: PeripheralViewModelListener {
         if let lastMove = room!.lastMove,
            let lastPlayer = room!.lastMoveDoneBy {
 //             if lastMove != lastMoveCoord && lastPlayer != lastMoveDoneByCoord {
-                PeripheralService.shared.dropPiece(at: lastMove, color: lastPlayer == room!.hostId ? UIColor.blue : UIColor.red )
-                game?.check(action: ConnectFourAction(column: lastMove))
+            PeripheralService.shared.dropPiece(at: lastMove, color: lastPlayer == room!.hostId ? UIColor.blue : UIColor.red )
+            game?.check(action: ConnectFourAction(column: lastMove))
 //                lastMoveCoord = lastMove
 //                lastMoveDoneByCoord = lastPlayer
-                
-                if let winner = game?.currentGameState.winner  {
-                    self.winner = winner == 1 ? room!.hostId : room!.opponentId
+            
+            if let winner = game?.currentGameState.winner  {
+                self.winner = winner == 1 ? room!.hostId : room!.opponentId ?? "AI"
+                let winningPositions = game!.currentGameState.getWinningPositions()
+                let winningIndexes = Array(winningPositions.map { getStripeIndex(row: $0[0], col: $0[1]) })
+                PeripheralService.shared.blinkPiece(at: winningIndexes, winner: self.winner == user.id)
 //                }
             }
         }

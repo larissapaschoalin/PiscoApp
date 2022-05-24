@@ -40,7 +40,17 @@ final class PeripheralService: NSObject, Identifiable {
         peripheral.writeValue(Data(message), for: inputChar, type: .withoutResponse)
     }
     
-    func blinkPiece(at positions: [Int]) {}
+    func blinkPiece(at positions: [Int], winner: Bool) {
+        guard let peripheral = connectedPeripheral,
+              let inputChar = inputChar else {
+                  return
+              }
+        
+        let message = [UInt8(3)] + Array(positions.map { UInt8($0) }) + [UInt8(winner ? 0 : 1)]
+        print(message)
+        peripheral.writeValue(Data(message), for: inputChar, type: .withoutResponse)
+    }
+    
     func setPisco(to matrix: Matrix) {
         guard let peripheral = connectedPeripheral,
               let inputChar = inputChar else {

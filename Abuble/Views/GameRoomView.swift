@@ -75,10 +75,11 @@ struct GameRoomView: View {
                 
             }
             
-            if let winner = coordinator.winner {
+            if coordinator.hasWinner() {
                 
-                Image(winner == coordinator.user.id ? "HappyFace" : "SadFace")
-                
+                Image(coordinator.winner == coordinator.user.id ? "HappyFace" : "SadFace")
+                    .padding(.top, 50)
+
                 VStack(spacing: 6) {
                     Text(win ? "Você" : "Game")
                         .font(Font.custom("PressStart2P-Regular", size: 40))
@@ -89,7 +90,7 @@ struct GameRoomView: View {
                         .font(Font.custom("PressStart2P-Regular", size: 40))
                         .foregroundColor(Color("DarkColor"))
                         .textCase(.uppercase)
-                }
+                }.padding(.vertical, 40)
                 
                 VStack{
                     Text("aperte qualquer botão do")
@@ -99,7 +100,7 @@ struct GameRoomView: View {
                     Text("Pisco para jogar novamente")
                         .font(Font.custom("Montserrat-Regular", size: 20))
                         .foregroundColor(Color("DarkColor"))
-                }
+                }.padding(.vertical, 50)
 
             } else {
                 
